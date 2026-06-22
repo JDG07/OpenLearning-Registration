@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check in · OpenLearning Pilipinas 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#29A79F;--teal-bright:#46D6C8;--teal-deep:#0C4F54;--teal-deeper:#06363C;
+    --ink:#052A3B;--yellow:#FDCC11;--yellow-deep:#E7B900;
+    --mist:#F8F9F9;--mist-tint:#ECF6F4;--paper:#FFFFFF;--line:#E2EAEA;--ink-soft:#56696F;
+    --violet:#8A7BFF;--cyan:#7FF0FF;--danger:#D6453B;
+    --radius:18px;--shadow:0 18px 50px -24px rgba(5,42,59,.4);
+    --display:"Figtree", system-ui, sans-serif;
+    --body:"Open Sans", system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);color:var(--ink);background:var(--mist);line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:var(--display);letter-spacing:-.02em;line-height:1.1}
+  .wrap{width:100%;max-width:640px;margin:0 auto;padding:0 22px}
+
+  .orb{position:absolute;border-radius:50%;filter:blur(58px);opacity:.5;pointer-events:none;z-index:0;animation:drift 16s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(14px,-18px) scale(1.07)}}
+
+  /* ── LOGO IMAGE ── */
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img{height:28px;width:auto;display:block}
+  .brand.on-dark img{filter:brightness(0) invert(1)} /* white version on dark bg */
+  .brand.hero-brand{justify-content:center;margin-bottom:22px}
+  .brand.hero-brand img{height:34px}
+
+  .tag-chip{font-size:.72rem;font-weight:700;color:var(--teal-deep);background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap}
+  .tag-chip b{color:var(--teal)}
+
+  .topbar{position:sticky;top:0;z-index:40;background:rgba(248,249,249,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:760px}
+
+  .reg-hero{position:relative;overflow:hidden;color:#fff;text-align:center;
+    background:linear-gradient(160deg,#13727A 0%, var(--teal-deep) 50%, var(--teal-deeper) 100%)}
+  .reg-hero .orb.a{width:320px;height:320px;background:radial-gradient(circle,var(--teal-bright),transparent 65%);top:-100px;right:-60px;opacity:.45}
+  .reg-hero .orb.b{width:260px;height:260px;background:radial-gradient(circle,var(--violet),transparent 65%);bottom:-120px;left:-70px;opacity:.38}
+  .reg-hero .wrap{position:relative;z-index:2;padding-top:44px;padding-bottom:96px}
+  .pill{display:inline-block;font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.08em;color:#fff;
+    background:rgba(70,214,200,.18);border:1px solid rgba(70,214,200,.5);padding:7px 16px;border-radius:999px;
+    box-shadow:0 0 22px -4px rgba(70,214,200,.55);text-transform:uppercase}
+  .reg-hero h1{font-weight:800;font-size:clamp(2rem,7vw,3.1rem);margin:18px auto 0;max-width:18ch}
+  .reg-hero .intro{font-size:1rem;color:rgba(255,255,255,.86);margin:14px auto 0;max-width:52ch}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin-top:18px;font-size:.9rem;color:rgba(255,255,255,.9);font-weight:600}
+  .meta-row span{display:inline-flex;align-items:center;gap:7px}
+  .meta-row svg{width:16px;height:16px;color:var(--teal-bright)}
+
+  .form-section{position:relative;z-index:5;padding:0 0 60px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);margin-top:-64px;padding:30px 24px}
+  @media(min-width:600px){ .card{padding:38px 36px} }
+  .card-head{margin-bottom:6px}
+  .card-head h2{font-weight:800;font-size:1.5rem;color:var(--ink)}
+  .card-head p{font-size:.92rem;color:var(--ink-soft);margin-top:6px}
+
+  .cert-note{display:flex;gap:12px;align-items:flex-start;background:var(--mist-tint);border:1px solid var(--line);
+    border-radius:14px;padding:14px 16px;margin:18px 0 6px}
+  .cert-note .ic{flex:none;width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--teal-bright));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.05rem}
+  .cert-note p{font-size:.86rem;color:var(--ink);line-height:1.5}
+  .cert-note b{font-weight:700}
+
+  .field{margin-top:18px}
+  .field label{display:block;font-family:var(--display);font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .field.req label::after{content:" *";color:var(--danger);font-weight:700}
+  .field input,.field select{width:100%;font-family:var(--body);font-size:.95rem;color:var(--ink);
+    border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:#fff;transition:.15s}
+  .field input::placeholder{color:#9aa9ad}
+  .field input:focus,.field select:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:transparent}
+  .field .hint{font-size:.76rem;color:var(--ink-soft);margin-top:5px}
+  .field.error input,.field.error select{border-color:var(--danger);outline-color:var(--danger)}
+  .field .err-msg{display:none;font-size:.76rem;color:var(--danger);margin-top:5px;font-weight:600}
+  .field.error .err-msg{display:block}
+  .row2{display:grid;gap:18px}
+  @media(min-width:520px){ .row2{grid-template-columns:1fr 1fr} }
+
+  .consent{display:flex;gap:11px;align-items:flex-start;margin-top:24px;padding:16px;background:var(--mist);border:1px solid var(--line);border-radius:14px}
+  .consent input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:var(--teal);cursor:pointer}
+  .consent label{font-size:.84rem;color:var(--ink-soft);line-height:1.55;cursor:pointer}
+  .consent a{color:var(--teal);font-weight:600;text-decoration:none}
+  .consent.error{border-color:var(--danger);background:#fdf2f1}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--display);font-weight:700;
+    font-size:1.02rem;cursor:pointer;border:none;border-radius:999px;padding:15px 28px;text-decoration:none;width:100%;
+    transition:transform .15s ease, box-shadow .25s ease, background .2s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn-yellow{background:var(--yellow);color:var(--ink);box-shadow:0 0 26px -8px rgba(253,204,17,.8);margin-top:24px}
+  .btn-yellow:hover{background:#ffd633;box-shadow:0 0 34px -6px rgba(253,204,17,.95)}
+  .btn-yellow:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .secure{display:flex;align-items:center;justify-content:center;gap:7px;font-size:.78rem;color:var(--ink-soft);margin-top:14px}
+  .secure svg{width:14px;height:14px}
+
+  .done{text-align:center;padding:14px 4px}
+  .done .mark{width:62px;height:62px;border-radius:50%;margin:0 auto 18px;background:radial-gradient(circle at 35% 30%,var(--teal-bright),var(--teal));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.8rem;box-shadow:0 0 30px -6px rgba(41,167,159,.85)}
+  .done h2{font-weight:800;font-size:1.7rem;color:var(--ink)}
+  .done .lead{font-size:.96rem;color:var(--ink-soft);margin:10px auto 0;max-width:42ch}
+  .done .lead b{color:var(--ink)}
+  .next{text-align:left;background:var(--mist-tint);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:24px}
+  .next h4{font-size:.95rem;color:var(--ink);margin-bottom:10px}
+  .next ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .next li{display:flex;gap:11px;align-items:flex-start;font-size:.88rem;color:var(--ink-soft)}
+  .next .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--teal);color:#fff;font-family:var(--display);
+    font-weight:700;font-size:.78rem;display:flex;align-items:center;justify-content:center;margin-top:1px}
+
+  footer{background:var(--teal-deeper);color:rgba(255,255,255,.78);padding:34px 0 42px}
+  footer .wrap{max-width:760px}
+  footer .brand{margin-bottom:10px}
+  footer p{font-size:.86rem;max-width:46ch}
+  footer a{color:var(--yellow);text-decoration:none}
+  .foot-note{font-size:.76rem;color:rgba(255,255,255,.45);margin-top:14px}
+
+  @media(prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <!-- LOGO: swap src to your actual path, e.g. "./OLLogo.jpeg" or "/assets/OLLogo.jpeg" -->
+      <img src="./OLLogo.jpeg" alt="OpenLearning">
+    </div>
+    <div class="tag-chip">#OpenlearningPilipinas</div>
+  </div>
+</div>
+
+<!-- HEADER BAND -->
+<header class="reg-hero">
+  <span class="orb a"></span><span class="orb b"></span>
+  <div class="wrap">
+    <div class="brand on-dark hero-brand">
+      <img src="./OLLogo.jpeg" alt="OpenLearning">
+    </div>
+    <span class="pill">OpenLearning Pilipinas 2026</span>
+    <h1>Welcome &mdash; check in here</h1>
+    <p class="intro">Thanks for joining <b>AI, Skills &amp; the Future of Learning</b>. Check in below to confirm your attendance &mdash; we'll email your <b>certificate of participation within 24 hours</b>, along with the session resources and follow-up info.</p>
+    <div class="meta-row">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>25 June 2026 · 9 AM</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Glasshouse, New World Makati</span>
+    </div>
+  </div>
+</header>
+
+<!-- FORM -->
+<section class="form-section">
+  <div class="wrap">
+    <div class="card" id="card">
+      <div class="form" id="regForm">
+        <div class="card-head">
+          <h2>Your details</h2>
+          <p>A quick check-in for schools, universities, and institutional partners. Fields marked * are required.</p>
+        </div>
+
+        <div class="cert-note">
+          <span class="ic">&#127891;</span>
+          <p>Your <b>certificate of participation</b> will be emailed within <b>24 hours</b> to the address you enter below. Please use one you check regularly.</p>
+        </div>
+
+        <div class="field req"><label>Institution name</label>
+          <input type="text" data-k="institution" placeholder="e.g. University of the Philippines">
+          <p class="err-msg">Please enter your institution name.</p>
+        </div>
+
+        <div class="row2">
+          <div class="field req"><label>Contact name</label>
+            <input type="text" data-k="contact_name" placeholder="Full name">
+            <p class="err-msg">Please enter a contact name.</p>
+          </div>
+          <div class="field req"><label>Mobile number</label>
+            <input type="tel" data-k="mobile" placeholder="09XX XXX XXXX" inputmode="tel">
+            <p class="err-msg">Please enter a valid mobile number.</p>
+          </div>
+        </div>
+
+        <div class="field req"><label>Email address</label>
+          <input type="email" data-k="email" placeholder="you@institution.edu.ph" inputmode="email">
+          <p class="hint">Your e-certificate and event updates will be sent here.</p>
+          <p class="err-msg">Please enter a valid email address.</p>
+        </div>
+
+        <div class="row2">
+          <div class="field req"><label>Current LMS</label>
+            <select data-k="current_lms">
+              <option value="">Select one&hellip;</option>
+              <option>We don't use an LMS yet</option>
+              <option>Moodle</option>
+              <option>Canvas</option>
+              <option>Google Classroom</option>
+              <option>Microsoft Teams / Education</option>
+              <option>Blackboard</option>
+              <option>Schoology</option>
+              <option>Brightspace (D2L)</option>
+              <option>OpenLearning</option>
+              <option>Other</option>
+            </select>
+            <p class="err-msg">Please select your current LMS.</p>
+          </div>
+          <div class="field req"><label>Number of students</label>
+            <select data-k="num_students">
+              <option value="">Select a range&hellip;</option>
+              <option>1&ndash;50</option>
+              <option>51&ndash;200</option>
+              <option>201&ndash;500</option>
+              <option>501&ndash;1,000</option>
+              <option>1,001&ndash;5,000</option>
+              <option>More than 5,000</option>
+            </select>
+            <p class="err-msg">Please select a range.</p>
+          </div>
+        </div>
+
+        <!-- hidden tracking fields -->
+        <input type="hidden" data-k="attendance_status" value="Attended – checked in on-site">
+        <input type="hidden" data-k="certificate_eligibility" value="Eligible">
+        <input type="hidden" data-k="ecert_sent" value="No">
+
+        <div class="consent" id="consentBox">
+          <input type="checkbox" id="consent" data-k="consent">
+          <label for="consent">I agree to OpenLearning collecting and processing the information above in accordance with the <a href="#" target="_blank" rel="noopener">Data Privacy Act of 2012 (RA 10173)</a>, and consent to receiving event updates and my e-certificate by email.</label>
+        </div>
+
+        <button class="btn btn-yellow" id="submitBtn">Confirm my attendance &rarr;</button>
+        <p class="secure">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Your details are kept private and used only for this event.
+        </p>
+      </div>
+
+      <!-- confirmation screen -->
+      <div class="done" id="done" style="display:none">
+        <div class="mark">&#10003;</div>
+        <h2>You're checked in!</h2>
+        <p class="lead">Thank you, <b id="doneName">there</b>. Your attendance is confirmed. Everything below will be sent to <b id="doneEmail">your inbox</b>.</p>
+        <div class="next">
+          <h4>What happens next</h4>
+          <ul>
+            <li><span class="n">1</span><span>Your attendance is recorded &mdash; no need to check in again.</span></li>
+            <li><span class="n">2</span><span>Your <b>certificate of participation</b> arrives by email within <b>24 hours</b>.</span></li>
+            <li><span class="n">3</span><span>We'll follow up with the session resources and helpful next steps.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="brand on-dark">
+      <img src="./OLLogo.jpeg" alt="OpenLearning">
+    </div>
+    <p>Questions about registration? Email <a href="mailto:hello@openlearning.com">hello@openlearning.com</a> or visit <a href="https://solutions.openlearning.com" target="_blank" rel="noopener">solutions.openlearning.com</a>.</p>
+    <p class="foot-note">&copy; 2026 OpenLearning · #OpenlearningPilipinas</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ─────────────────────────────────────────────────────────────────────────
+  // GOOGLE FORMS FIELD IDs
+  // Replace each value below with the real entry IDs from your Google Form.
+  // See the setup guide for how to find them (right-click → Inspect on each
+  // question's <input> in the prefilled-URL preview).
+  // ─────────────────────────────────────────────────────────────────────────
+  var FORM_ACTION = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+
+  var FIELD_MAP = {
+    institution:           "entry.XXXXXXXXX",
+    contact_name:          "entry.XXXXXXXXX",
+    mobile:                "entry.XXXXXXXXX",
+    email:                 "entry.XXXXXXXXX",
+    current_lms:           "entry.XXXXXXXXX",
+    num_students:          "entry.XXXXXXXXX",
+    attendance_status:     "entry.XXXXXXXXX",
+    certificate_eligibility:"entry.XXXXXXXXX",
+    ecert_sent:            "entry.XXXXXXXXX",
+    check_in_datetime:     "entry.XXXXXXXXX"   // optional: add this question in your form too
+  };
+  // ─────────────────────────────────────────────────────────────────────────
+
+  var fields = ['institution','contact_name','mobile','email','current_lms','num_students'];
+
+  function fieldWrap(el){ return el.closest('.field'); }
+  function validMobile(v){ return v.replace(/[^0-9]/g,'').length >= 10; }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function clearErr(el){ var w=fieldWrap(el); if(w) w.classList.remove('error'); }
+  fields.forEach(function(k){
+    var el = document.querySelector('[data-k="'+k+'"]');
+    if(el) el.addEventListener('input', function(){ clearErr(el); });
+    if(el && el.tagName==='SELECT') el.addEventListener('change', function(){ clearErr(el); });
+  });
+  document.getElementById('consent').addEventListener('change', function(){
+    document.getElementById('consentBox').classList.remove('error');
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function(){
+    var data = {}, firstBad = null;
+
+    // validate
+    fields.forEach(function(k){
+      var el = document.querySelector('[data-k="'+k+'"]');
+      var v = (el.value||'').trim();
+      data[k] = v;
+      var bad = !v;
+      if(k==='email' && v && !validEmail(v)) bad = true;
+      if(k==='mobile' && v && !validMobile(v)) bad = true;
+      if(bad){ fieldWrap(el).classList.add('error'); if(!firstBad) firstBad = el; }
+    });
+
+    var consent = document.getElementById('consent');
+    if(!consent.checked){ document.getElementById('consentBox').classList.add('error'); if(!firstBad) firstBad = consent; }
+    if(firstBad){ firstBad.focus(); firstBad.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+
+    // collect hidden fields
+    document.querySelectorAll('[type="hidden"][data-k]').forEach(function(h){
+      data[h.getAttribute('data-k')] = h.value;
+    });
+    data.check_in_datetime = new Date().toISOString();
+
+    // ── Submit to Google Forms via a hidden iframe (no redirect) ──
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    var iframe = document.createElement('iframe');
+    iframe.name = 'hidden_submit';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = FORM_ACTION;
+    form.target = 'hidden_submit';
+
+    Object.keys(FIELD_MAP).forEach(function(k){
+      if(data[k] !== undefined){
+        var inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = FIELD_MAP[k];
+        inp.value = data[k] || '';
+        form.appendChild(inp);
+      }
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Show confirmation after a short delay (Google Forms doesn't send a real response)
+    setTimeout(function(){
+      document.getElementById('doneName').textContent = (data.contact_name.split(' ')[0] || 'there');
+      document.getElementById('doneEmail').textContent = data.email;
+      document.getElementById('regForm').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      document.getElementById('card').scrollIntoView({behavior:'smooth',block:'start'});
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>
